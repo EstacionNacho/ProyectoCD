@@ -1,0 +1,31 @@
+{
+  "name": "conciertoapi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-jwt": "^5.3.1",
+    "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.9",
+    "morgan": "~1.9.1",
+    "net": "^1.0.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pug": "2.0.0-beta11",
+    "readline-sync": "^1.4.9",
+    "swagger-ui-express": "^4.0.4",
+    "unique-random": "^2.1.0",
+    "yamljs": "^0.3.0"
+  },
+  "description": "Proyecto computacion distribuida",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "Nacho",
+  "license": "ISC"
+}

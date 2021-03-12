@@ -1,0 +1,447 @@
+---
+swagger: "2.0"
+info:
+  description: "API Concerts "
+  version: "1.0.0"
+  title: "API Concerts"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "ignarodriguez@alumnos.uvigo.es"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:5000"
+basePath: "/ProyeCD/"
+
+tags:
+- name: "Concerts"
+  description: "Concert funcionalities"
+- name: "Bookings"
+  description: "Bookings funcionalities"
+- name: "Users"
+  description: "User funcionalities"
+    
+schemes:
+- "https"
+- "http"
+
+
+paths:
+  /concerts:
+    post:
+      tags:
+      - "Concerts"
+      summary: "add a concert"
+      description: ""
+      operationId: "addConcert"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "String"
+        description: "name of the concert "
+        required: true
+        descriptionOfConcert: "String"
+        description: "description of the concert "
+        numSeats: "Number"
+        description: "number of seats for the concert "
+        required: true
+        dateOfConcert: "Date"
+        description: "date of the concert "
+        required: true
+        tags: "[String]"
+        description: "tags of the concert "
+        schema:
+          $ref: "#/models/concertModels"
+      responses:
+        404:
+          description: "Invalid input"
+        401:
+          description: "Successful operation"
+        400:
+          description: "Invalid input"
+          
+    get:
+      tags:
+      - "Concerts"
+      summary: "Show by date all concerts"
+      description: ""
+      operationId: "listAll"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/models/concertModel"
+          
+  /concert/{code}:
+    get:
+      tags:
+      - "Concerts"
+      summary: "Find concert by field code"
+      description: "Returns a single concert"
+      operationId: "listConcert"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - code: "code"
+        in: "path"
+        description: "code of concert to return"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/concertModels"
+        404:
+          description: "Concert not found"
+    put:
+      tags:
+      - "Concerts"
+      summary: "Update a concert"
+      description: ""
+      operationId: "updateConcert"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        tags: "[String]"
+        description: "New tags for the concert"
+        dateOfConcert: "Date"
+        description: "New date for the concert"
+        numSeats: "Number"
+        description: "new number of seats to book "
+        username: "String"
+        description: "Username of a registered user"
+        required: true
+      - code: "code"
+        in: "path"
+        description: "code of concert to update"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/concertModels"
+        400:
+          description: "Can't update some parameter"
+        404:
+          description: "Concert not found"
+      delete:
+      tags:
+      - "Concerts"
+      summary: "Delete a concert"
+      description: ""
+      operationId: "deleteConcert"
+      parameters:
+      - in: "body"
+        username: "String"
+        description: "name of a registered user "
+      - code: "code"
+        in: "path"
+        description: "code of concert to delete"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+        404:
+          description: "Concert not found"
+        400:
+          description: "Error"  
+      
+  /concert/booking/{code}:
+    get:
+      tags:
+      - "Concerts"
+      summary: "Find all details about a concert"
+      description: "Returns a single concert and the bookings in it"
+      operationId: "detailConcert"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - code: "code"
+        in: "path"
+        description: "code of concert to return"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/concertModels"
+            $ref: "#/models/bookingModels"
+        400:
+          description: "Error"
+
+    /concert/tag/{tag}:
+    get:
+      tags:
+      - "Concerts"
+      summary: "Find all concerts with a tag"
+      description: "Returns all concerts that match the tag"
+      operationId: "listConcertTag"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - code: "tag"
+        in: "path"
+        description: "tag of concerts to return"
+        required: true
+        type: "[String]"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/concertModels"
+        400:
+          description: "Error"
+
+  /bookings:
+    post:
+      tags:
+      - "bookings"
+      summary: "add a booking"
+      description: ""
+      operationId: "addBooking"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        concertName: "String"
+        description: "name of the concert "
+        required: true
+        numSeats: "Number of seats to book"
+        description: "number of seats for the concert "
+        required: true
+        username: "Username of a registered user"
+        required: true
+        schema:
+          $ref: "#/models/bookingModels"
+      responses:
+        404:
+          description: "User not found"
+        401:
+          description: "Successful operation"
+        400:
+          description: "Invalid input"
+          
+  /booking/{code}:
+    get:
+      tags:
+      - "Bookings"
+      summary: "Find booking by field code"
+      description: "Returns a single booking"
+      operationId: "listBooking"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - code: "code"
+        in: "path"
+        description: "code of booking to return"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/bookingModels"
+        404:
+          description: "booking not found"
+    put:
+      tags:
+      - "Bookings"
+      summary: "Update a booking number of seats"
+      description: ""
+      operationId: "updateBooking"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+      username: "String"
+        description: "Username of a registered user"
+        required: true
+        numSeats: "Number"
+        description: "number of Seats to update "
+      - code: "code"
+        in: "path"
+        description: "code of booking to update"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+          schema:
+            $ref: "#/models/bookingModels"
+        400:
+          description: "Can't update some parameter"
+        404:
+          description: "Booking not found"
+      delete:
+      tags:
+      - "Bookings"
+      summary: "Delete a booking"
+      description: ""
+      operationId: "deleteBooking"
+      parameters:
+      - in: "body"
+      username: "String"
+        description: "Username of a registered user"
+        required: true  
+      - code: "code"
+        in: "path"
+        description: "code of booking to delete"
+        required: true
+        type: "String"
+      responses:
+        401:
+          description: "Successful operation"
+        404:
+          description: "Booking not found"
+        400:
+          description: "Error"  
+
+  /signup:
+    post:
+      tags:
+      - "Users"
+      summary: "add a user"
+      description: ""
+      operationId: "signup"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "String"
+        description: "name of the user "
+        required: true
+        username: "String"
+        description: "username for the user "
+        required: true
+        email: "String"
+        description: "email of the user "
+        required: true
+        password: "String"
+        description: "password for the user "
+        required: true
+        schema:
+          $ref: "#/models/userModels"
+      responses:
+        404:
+          description: "Invalid input"
+        401:
+          description: "Successful operation"
+        400:
+          description: "Invalid input"
+
+  /login:
+    post:
+      tags:
+      - "Users"
+      summary: "login of an user"
+      description: ""
+      operationId: "login"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        username: "String"
+        description: "username for the user "
+        required: true
+        password: "String"
+        description: "password for the user "
+        required: true
+        schema:
+          $ref: "#/models/userModels"
+      responses:
+        404:
+          description: "Invalid input"
+        401:
+          description: "Successful operation"
+        400:
+          description: "Invalid input"
+
+definitions:
+  Concert:
+    type: "object"
+    properties:
+      name:
+        type: "String"
+      descriptionOfConcert:
+        type: "String"
+      code:
+        type: "String"
+      userId:
+        type: "object"
+      numSeats:
+        type: "Number"
+      dateOfConcert:
+        type: "Date"    
+      createdDate:
+        type: "string"
+      tags:
+        type: "[String]"
+    
+    Booking:
+    type: "object"
+    properties:
+      concertName:
+        type: "String"
+      concertId:
+        type: "object"
+      userId:
+        type: "object"
+      code:
+        type: "String"
+      numSeats:
+        type: "Number"   
+      createdDate:
+        type: "string"
+
+    User:
+    type: "object"
+    properties:
+      username:
+        type: "String"
+      name:
+        type: "String"
+      email:
+        type: "String"
+      dadosPassword:
+        type: "{ hash: String, salt: String }"
+
+
